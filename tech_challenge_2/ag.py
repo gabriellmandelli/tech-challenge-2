@@ -23,11 +23,16 @@ def generate_population(coins_quantity, population_size=10):
     unique_individuals = set()
 
     def generate_individual(possibles_coins, num_coins):
-        coins = tuple(random.sample(possibles_coins, num_coins))
-        weights = [random.random() for _ in range(num_coins)]
+        while True:
+            coins = set(random.sample(possibles_coins, num_coins))
+            weights = [random.random() for _ in range(num_coins)]
+            if len(coins) == len(weights):
+                break
+
         sum_weights = sum(weights)
         normalized_weights = tuple(round(w / sum_weights, 2) for w in weights)
-        return coins, normalized_weights
+        normalized_coins = tuple(coins)
+        return normalized_coins, normalized_weights
 
     while len(population) < population_size:
         coins, weights = generate_individual(possibles_coins, coins_quantity)

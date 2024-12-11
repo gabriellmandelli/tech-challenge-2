@@ -8,7 +8,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # To cripto the good sharpe ratio is 1.5, to stock is 1, to forex is 0.5
 good_sharpe_ratio = 1.5
 
-population_size = 20
+population_size = 40
+
+coint_qtd = 5
 
 from ag import (
     generate_population,
@@ -30,7 +32,7 @@ def main():
 
     ## generates population of ten wallets with 6 coins each
     population = generate_population(
-        coins_quantity=6, population_size=population_size
+        coins_quantity=coint_qtd, population_size=population_size
     )
     # print(population)
     while running:
@@ -64,7 +66,15 @@ def main():
         new_population = [mutated_individual]
         # ensure i don't lose the best wallet
         new_population.extend(selected)
-        # print(f"new population: {new_population}")
+
+        # Generate new random individuals to fill 50% of the population
+        num_random_individuals = population_size // 2
+        new_random_individuals = generate_population(coins_quantity=coint_qtd, population_size=num_random_individuals)
+
+        # Insert new random individuals one by one into new_population
+        for individual in new_random_individuals:
+            new_population.append(individual)
+        
         while len(new_population) < population_size:
             parent1, parent2 = random.choices(population[:population_size], k=2)
             child = crossover(parent1, parent2)
