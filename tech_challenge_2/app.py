@@ -26,11 +26,11 @@ from ag import (
 wallet = []
 
 # Test fitness
-def main():
+def main55():
     population = [
         {
-            'coins': ['Aave', 'Bitcoin', 'BNB'],
-            'weights': [0.25, 0.5, 0.25]
+            'coins': [ 'Bitcoin', 'BNB'],
+            'weights': [0.5, 0.5]
         },
     ]
     fitness = calculate_fitness(population)
@@ -38,8 +38,8 @@ def main():
 
 def main22():
     # Exemplo de uso
-    paths = ['Aave', 'Bitcoin', 'BNB']  # Substitua com os caminhos para seus arquivos
-    weights = [0.25, 0.5, 0.25]  # Pesos correspondentes para as criptomoedas
+    paths = [ 'Bitcoin', 'BNB']  # Substitua com os caminhos para seus arquivos
+    weights = [0.5, 0.5]  # Pesos correspondentes para as criptomoedas
 
     sharpe_ratio, retorno_anualizado, volatilidade_anualizada = calculate_sharpe_ratio_for_multiple_cryptos(paths, weights)
 
@@ -47,7 +47,7 @@ def main22():
     print(f'Retorno Anualizado: {retorno_anualizado:.2%}')
     print(f'Volatilidade Anualizada: {volatilidade_anualizada:.2%}')
 
-def main2():
+def main():
     running = True
     has_elitism = False
     has_elitism_and_tornament = True
