@@ -56,7 +56,6 @@ def get_coin_return(coin_name):
         "log_returns": df["Log Return"],
     }
 
-
 def calculate_covariance_matrix(ativos):
     log_returns = pd.DataFrame()
 
