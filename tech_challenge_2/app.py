@@ -8,13 +8,14 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # To cripto the good sharpe ratio is 1.5, to stock is 1, to forex is 0.5
 good_sharpe_ratio = 1.5
 
-population_size = 40
+population_size = 20
 
 coint_qtd = 5
 
 from ag import (
     generate_population,
     calculate_fitness,
+    calculate_sharpe_ratio_for_multiple_cryptos,
     verify_finishing_condition,
     selection_elitism,
     selection_tournament,
@@ -24,10 +25,32 @@ from ag import (
 
 wallet = []
 
-
+# Test fitness
 def main():
+    population = [
+        {
+            'coins': ['Aave', 'Bitcoin', 'BNB'],
+            'weights': [0.25, 0.5, 0.25]
+        },
+    ]
+    fitness = calculate_fitness(population)
+    print(fitness)
+
+def main22():
+    # Exemplo de uso
+    paths = ['Aave', 'Bitcoin', 'BNB']  # Substitua com os caminhos para seus arquivos
+    weights = [0.25, 0.5, 0.25]  # Pesos correspondentes para as criptomoedas
+
+    sharpe_ratio, retorno_anualizado, volatilidade_anualizada = calculate_sharpe_ratio_for_multiple_cryptos(paths, weights)
+
+    print(f'Índice de Sharpe: {sharpe_ratio:.2f}')
+    print(f'Retorno Anualizado: {retorno_anualizado:.2%}')
+    print(f'Volatilidade Anualizada: {volatilidade_anualizada:.2%}')
+
+def main2():
     running = True
     has_elitism = False
+    has_elitism_and_tornament = True
     numGeneration = 1
 
     ## generates population of ten wallets with 6 coins each
@@ -53,12 +76,20 @@ def main():
 
         ## selection of the best wallets
         selected = []
-        if has_elitism:
+        if has_elitism_and_tornament:
+            selected = selection_elitism(population_with_fitness)[:1] + selection_tournament(population_with_fitness)[:1]
+        elif has_elitism:
             selected = selection_elitism(population_with_fitness)
         else:
-           selected = selection_tournament(population_with_fitness)
+            selected = selection_tournament(population_with_fitness)
 
-        print(f"Best wallet this now: {selected}")
+        print(f"Best wallet fitness: {selected[0].get('fitness')}")
+        print(f"Best wallet weight: {selected[0].get('coins')}")
+        print(f"Best wallet weight: {selected[0].get('weights')}")
+        print(f"Best wallet fitness: {selected[1].get('fitness')}")
+        print(f"Best wallet coins: {selected[1].get('coins')}")
+        print(f"Best wallet weights: {selected[1].get('weights')}")
+
         new_individual = crossover(random.choices(selected, k=1)[0], random.choices(selected, k=1)[0])
         mutated_individual = mutate(new_individual)
 
@@ -76,10 +107,20 @@ def main():
             new_population.append(individual)
         
         while len(new_population) < population_size:
+            print(f"ENTROU AQUI population {len(new_population)} population size {population_size}")
             parent1, parent2 = random.choices(population[:population_size], k=2)
             child = crossover(parent1, parent2)
             child = mutate(child)
+
+            child2 = crossover(parent1, child)
+            child2 = mutate(child2)
+
+            child3 = crossover(child, parent2)
+            child3 = mutate(child3)
+
             new_population.extend([child])
+            new_population.extend([child2])
+            new_population.extend([child3])
 
         # overrides the population
         population.clear()

@@ -38,6 +38,10 @@ Processo parecido como qualquer package manager:
 poetry add LIB_QUE_DESEJAR
 ```
 
+```
+export PATH="$HOME/.local/bin:$PATH"
+```
+
 No arquivo `pyproject.toml` será adicionada na sessão `[tool.poetry.dependencies]` se for de uma dependência de prod, se for de dev irá para `[tool.poetry.dev-dependencies]`
 
 ### Rodar o projeto
